@@ -4,65 +4,63 @@ $horses = [
     [
         'name' => 'Дакар',
         'color' => 'Рыжий',
-        'prise' => 200,
-        'filing time' => 5
+        'price' => 200,
+        'filingTime' => 5,
     ],
     [
         'name' => 'Гамлет',
         'color' => 'Серый',
-        'prise' => 350,
-        'filing time' => 9
+        'price' => 350,
+        'filingTime' => 9,
     ],
     [
         'name' => 'Буцефал',
         'color' => 'Вороной',
-        'prise' => 1000,
-        'filing time' => 1
+        'price' => 1000,
+        'filingTime' => 1,
     ],
     [
         'name' => 'Зевс',
         'color' => 'Пегой',
-        'prise' => 450,
-        'filing time' => 7
+        'price' => 450,
+        'filingTime' => 7,
     ],
     [
         'name' => 'Аполлон',
         'color' => 'Буланой',
-        'prise' => 150,
-        'filing time' => 13
+        'price' => 150,
+        'filingTime' => 13,
     ],
     [
         'name' => 'Спирит',
         'color' => 'Вороной',
-        'prise' => 650,
-        'filing time' => 3
+        'price' => 650,
+        'filingTime' => 3,
     ],
     [
         'name' => 'Алтай',
         'color' => 'Серый',
-        'prise' => 250,
-        'filing time' => 8
+        'price' => 250,
+        'filingTime' => 8,
     ],
     [
         'name' => 'Вегас',
         'color' => 'Гнедой',
-        'prise' => 700,
-        'filing time' => 4
+        'price' => 700,
+        'filingTime' => 4,
     ],
     [
         'name' => 'Гром',
         'color' => 'Черный',
-        'prise' => 1250,
-        'filing time' => 2
+        'price' => 1250,
+        'filingTime' => 2,
     ]
-
-
 ];
 
 
-echo $horses[0]['name'], ', ', 'цвет ', $horses[0]['color'],
-', ', 'цена за поездку- ', ($horses[0]['prise'] * BASE_MULTIPLIER), ' руб.',
-'<br/>', 'Время подачи лошади: ', $horses[0]['filing time'], ' мин.';
+echo $horses[0]['name'], ', цвет ', $horses[0]['color'],
+', цена за поездку- ', ($horses[0]['price'] * BASE_MULTIPLIER), ' руб.',
+'<br/>', 'Время подачи лошади: ', $horses[0]['filingTime'], ' мин.';
 
 echo '<h4>  ВЫВОД ЧЕРЕЗ sprintf:  </h4>';
 
@@ -72,40 +70,40 @@ $format = '%s, цвет %s, цена за поездку- %d руб. <br/>
 
 $horseName = $horses[1]['name'];
 $color = $horses[1]['color'];
-$prise = $horses[1]['prise'] * BASE_MULTIPLIER;
-$filingTime = $horses[1]['filing time'];
+$price = $horses[1]['price'] * BASE_MULTIPLIER;
+$filingTime = $horses[1]['filingTime'];
 
-echo sprintf($format, $horseName, $color, $prise, $filingTime);
+echo sprintf($format, $horseName, $color, $price, $filingTime);
 
 echo '<h4>   СПИСОК ВСЕХ ЛОШАДЕЙ через for:  </h4>';
 
 for ($i = 0; $i < count($horses); $i++) {
-    echo $i + 1, ') ', $horses[$i]['name'], ', ', 'цвет ', $horses[$i]['color'],
-    ', ', 'цена за поездку- ', ($horses[$i]['prise'] * BASE_MULTIPLIER), ' руб.',
-    '<br/>', 'Время подачи лошади: ', $horses[$i]['filing time'], ' мин.', '<br/><br/>';
+    echo $i + 1, ') ', $horses[$i]['name'], ', цвет ', $horses[$i]['color'], ', цена за поездку- ',
+    ($horses[$i]['price'] * BASE_MULTIPLIER), ' руб.',
+    '<br/>', 'Время подачи лошади: ', $horses[$i]['filingTime'], ' мин.', '<br/><br/>';
 }
 echo '<h4>   СПИСОК ВСЕХ ЛОШАДЕЙ через foreach:  </h4>';
 
 $num = 1;
 
 foreach ($horses as $key => $value) {
-    echo $num, ') ', $value['name'], ', ', 'цвет ', $value['color'],
-    ', ', 'цена за поездку- ', ($value['prise'] * BASE_MULTIPLIER), ' руб.',
-    '<br/>', 'Время подачи лошади: ', $value['filing time'], ' мин.', '<br/><br/>';
+    echo $num, ') ', $value['name'], ', цвет ', $value['color'],
+     ', цена за поездку- ', ($value['price'] * BASE_MULTIPLIER), ' руб.',
+    '<br/>', 'Время подачи лошади: ', $value['filingTime'], ' мин.', '<br/><br/>';
     $num++;
 }
 
 echo '<h4>  СПИСОК ВСЕХ ЛОШАДЕЙ через while: </h4>';
 
 $i = 0;
-$num = 1;
+
 
 while ($i < count($horses)) {
-    echo $num, ') ', $horses[$i]['name'], ', ', 'цвет ', $horses[$i]['color'],
-    ', ', 'цена за поездку- ', ($horses[$i]['prise'] * BASE_MULTIPLIER), ' руб.',
-    '<br/>', 'Время подачи лошади: ', $horses[$i]['filing time'], ' мин.', '<br/><br/>';
+    echo $i+1, ') ', $horses[$i]['name'],  ', цвет ', $horses[$i]['color'],
+     ', цена за поездку- ', ($horses[$i]['price'] * BASE_MULTIPLIER), ' руб.',
+    '<br/>', 'Время подачи лошади: ', $horses[$i]['filingTime'], ' мин.', '<br/><br/>';
     $i++;
-    $num++;
+
 }
 
 echo '<h4>  ОТБОР ЛОШАДЕЙ ПО ПАРАМЕТРАМ:   </h4>';
@@ -113,12 +111,12 @@ echo '<h4>  ОТБОР ЛОШАДЕЙ ПО ПАРАМЕТРАМ:   </h4>';
 echo '<h5>  ОТБОР  ПО СТОИМОСТИ:  </h5>';
 
 foreach ($horses as $key => $value) {
-    $prise = $value['prise'] * BASE_MULTIPLIER;
+    $price = $value['price'] * BASE_MULTIPLIER;
 
-    if ($prise < 400) {
-        echo $value['name'], ', ', 'цвет ', $value['color'],
-        ', ', 'цена за поездку- ', $prise, ' руб.',
-        '<br/>', 'Время подачи лошади: ', $value['filing time'], ' мин.', '<br/><br/>';
+    if ($price < 400) {
+        echo $value['name'],  ', цвет ', $value['color'],
+         ', цена за поездку- ', $price, ' руб.',
+        '<br/>', 'Время подачи лошади: ', $value['filingTime'], ' мин.', '<br/><br/>';
         $num++;
     }
 }
@@ -129,9 +127,9 @@ echo '<h5>  ОТБОР  ПО ЦВЕТУ:  </h5>';
 foreach ($horses as $key => $value) {
     $color = $value['color'];
     if ($color == 'Серый') {
-        echo $value['name'], ', ', 'цвет ', $color,
-        ', ', 'цена за поездку- ', $value['prise'] * BASE_MULTIPLIER, ' руб.',
-        '<br/>', 'Время подачи лошади: ', $value['filing time'], ' мин.', '<br/><br/>';
+        echo $value['name'],  ', цвет ', $color,
+         ', цена за поездку- ', $value['price'] * BASE_MULTIPLIER, ' руб.',
+        '<br/>', 'Время подачи лошади: ', $value['filingTime'], ' мин.', '<br/><br/>';
         $num++;
 
     }
