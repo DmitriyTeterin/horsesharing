@@ -88,76 +88,33 @@ function receiveHorseInfo(array $horse): string
     return sprintf($format, $horseName, $color, $tariff, $price, $filingTime);
 }
 
-
 /**
  * @param $horses
  * @param $tariff
  * @return array
  */
-
 function filterByTariff($horses, $tariff): array
 {
     $filteredHorses = [];
 
     foreach ($horses as $key => $value) {
-
         if ($tariff == $value['tariff']) {
-            for ($i = 0; $i < count($horses); $i++) {
-                $filteredHorses [$i] = $value;
-
-            }
+            $filteredHorses [$key] = $value;
         }
     }
+
     return $filteredHorses;
 }
 
+$newFilteredHorses = filterByTariff($horses, 'Эконом');
 
-for ($i = 0; $i < count($horses); $i++) {
-    echo receiveHorseInfo(filterByTariff($horses, 'Эконом'));
+foreach ($newFilteredHorses as $horse) {
+    echo receiveHorseInfo($horse);
 }
 
 
-die;
-echo receiveHorseInfo($horses[0]);
-
-echo '<h4>  ВЫВОД ЧЕРЕЗ sprintf:  </h4>';
 
 
-echo receiveHorseInfo($horses[1]);
-
-
-echo '<h4>   СПИСОК ВСЕХ ЛОШАДЕЙ через for:  </h4>';
-
-for ($i = 0; $i < count($horses); $i++) {
-    echo receiveHorseInfo($horses[$i]);
-}
-
-echo '<h4>   СПИСОК ВСЕХ ЛОШАДЕЙ через foreach:  </h4>';
-
-
-foreach ($horses as $key => $value) {
-    echo receiveHorseInfo($value);
-}
-
-echo '<h4>  СПИСОК ВСЕХ ЛОШАДЕЙ через while: </h4>';
-
-$i = 0;
-
-while ($i < count($horses)) {
-    echo receiveHorseInfo($horses[$i]);
-    $i++;
-}
-
-echo '<h4>  ОТБОР ЛОШАДЕЙ ПО ПАРАМЕТРАМ:   </h4>';
-
-echo '<h5>  ОТБОР  ПО СТОИМОСТИ:  </h5>';
-
-foreach ($horses as $key => $value) {
-    $price = $value['price'] * BASE_MULTIPLIER;
-    if ($price < 400) {
-        echo receiveHorseInfo($value);
-    }
-}
 
 
 
