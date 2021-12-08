@@ -180,19 +180,20 @@ function receiveHorseInfo(array $horse): string
 function filter(array $horses, int $filterableCity, int $filterableTariff): ?array
 {
     $filteredHorse = [];
+    $i = 0;
     foreach ($horses as $value) {
 
         if ($filterableCity == $value['city'] && $filterableTariff == $value['tariff']) {
-            $filteredHorse = $value;
+            $filteredHorse[$i] = $value;
+            $i++;
         }
     }
     return $filteredHorse;
 
 }
 
+$newFilteredHorse = filter($horses, 2, 3);
 
-$newFilteredHorse = filter($horses, 1, 2);
-print_r($newFilteredHorse);
 foreach ($newFilteredHorse as $horse) {
     echo receiveHorseInfo($horse);
 }
