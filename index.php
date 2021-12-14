@@ -133,6 +133,7 @@ $horses = [
 ];
 
 /**
+ * Ищет в справочнике лошадь по параметрам.
  * @param array $array
  * @param string $key
  * @param int|string $value
@@ -145,8 +146,8 @@ function findByItem(array $array, string $key, $value): ?array
             return $item;
         }
     }
-    return null;
 
+    return null;
 }
 
 /**
@@ -171,34 +172,33 @@ function receiveHorseInfo(array $horse): string
 }
 
 /**
- * Фильтрует список лошадей по городу и по тарифу.
+ * Фильтрует список лошадей по городу или по тарифу.
  * @param array $horses
- * @param int $filterableCity
- * @param int $filterableTariff
+ * @param string $key
+ * @param $value
  * @return array
  */
-function filter(array $horses, int $filterableCity, int $filterableTariff): ?array
+function filter(array $horses, string $key, $value): ?array
 {
-    $filteredHorse = [];
-    $i = 0;
-    foreach ($horses as $value) {
+    $result = [];
+    foreach ($horses as $horse) {
 
-        if ($filterableCity == $value['city'] && $filterableTariff == $value['tariff']) {
-            $filteredHorse[$i] = $value;
-            $i++;
+        if ($horse[$key] === $value) {
+            $result[] = $horse;
         }
     }
-    return $filteredHorse;
 
+    return $result;
 }
 
-$newFilteredHorse = filter($horses, 2, 3);
+$filteredHorseByTariff = filter($horses, 'tariff', 1);
+$filteredHorseByCity = filter($filteredHorseByTariff, 'city', 2);
 
-foreach ($newFilteredHorse as $horse) {
+foreach ($filteredHorseByCity as $horse) {
     echo receiveHorseInfo($horse);
 }
 
-
+//https://www.youtube.com/watch?v=4SCrZ6bEqAc
 
 
 
