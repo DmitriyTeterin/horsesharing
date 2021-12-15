@@ -2,13 +2,16 @@
 const BASE_MULTIPLIER = 1;
 
 $tariffs = [
-    ['id' => 1,
+    [
+        'id' => 1,
         'name' => 'Эконом',
     ],
-    ['id' => 2,
+    [
+        'id' => 2,
         'name' => 'Комфорт',
     ],
-    ['id' => 3,
+    [
+        'id' => 3,
         'name' => 'Бизнес',
     ],
 ];
@@ -133,7 +136,7 @@ $horses = [
 ];
 
 /**
- * Ищет в справочнике лошадь по параметрам.
+ * Ищет в справочниках значение параметра лошади по id.
  * @param array $array
  * @param string $key
  * @param int|string $value
@@ -172,7 +175,7 @@ function receiveHorseInfo(array $horse): string
 }
 
 /**
- * Фильтрует список лошадей по городу или по тарифу.
+ * Фильтрует список лошадей по заданному параметру.
  * @param array $horses
  * @param string $key
  * @param $value
@@ -182,7 +185,6 @@ function filter(array $horses, string $key, $value): ?array
 {
     $result = [];
     foreach ($horses as $horse) {
-
         if ($horse[$key] === $value) {
             $result[] = $horse;
         }
@@ -191,17 +193,9 @@ function filter(array $horses, string $key, $value): ?array
     return $result;
 }
 
-$filteredHorseByTariff = filter($horses, 'tariff', 1);
-$filteredHorseByCity = filter($filteredHorseByTariff, 'city', 2);
+$filteredHorseByTariff = filter($horses, 'tariff', 2);
+$filteredHorseByCity = filter($filteredHorseByTariff, 'city', 1);
 
 foreach ($filteredHorseByCity as $horse) {
     echo receiveHorseInfo($horse);
 }
-
-//https://www.youtube.com/watch?v=4SCrZ6bEqAc
-
-
-
-
-
-
