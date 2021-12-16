@@ -136,7 +136,7 @@ $horses = [
 ];
 
 /**
- * Ищет в справочниках значение параметра лошади по id.
+ * Ищет в массивах значение параметра  по id.
  * @param array $array
  * @param string $key
  * @param int|string $value
@@ -175,7 +175,7 @@ function receiveHorseInfo(array $horse): string
 }
 
 /**
- * Фильтрует список лошадей по заданному параметру.
+ * Фильтрует массив по заданному параметру.
  * @param array $horses
  * @param string $key
  * @param $value
