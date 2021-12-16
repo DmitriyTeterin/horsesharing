@@ -193,9 +193,9 @@ function filter(array $horses, string $key, $value): ?array
     return $result;
 }
 
-$filteredHorseByTariff = filter($horses, 'tariff', 2);
-$filteredHorseByCity = filter($filteredHorseByTariff, 'city', 1);
+$horses = filter($horses, 'tariff', 1);
+$horses = filter($horses, 'city', 1);
 
-foreach ($filteredHorseByCity as $horse) {
+foreach ($horses as $horse) {
     echo receiveHorseInfo($horse);
 }
