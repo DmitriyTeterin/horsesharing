@@ -1,82 +1,157 @@
 <?php
 const BASE_MULTIPLIER = 1;
 
+$tariffs = [
+    [
+        'id' => 1,
+        'name' => 'Эконом',
+    ],
+    [
+        'id' => 2,
+        'name' => 'Комфорт',
+    ],
+    [
+        'id' => 3,
+        'name' => 'Бизнес',
+    ],
+];
+
+$cities = [
+    [
+        'id' => 1,
+        'name' => 'Томск',
+
+    ],
+    [
+        'id' => 2,
+        'name' => 'Новосибирск',
+    ],
+];
+
+$colors = [
+    [
+        'id' => 1,
+        'name' => 'Рыжий',
+    ],
+    [
+        'id' => 2,
+        'name' => 'Серый',
+    ],
+    [
+        'id' => 3,
+        'name' => 'Вороной',
+    ],
+    [
+        'id' => 4,
+        'name' => 'Пегой',
+    ],
+    [
+        'id' => 5,
+        'name' => 'Буланой',
+    ],
+    [
+        'id' => 6,
+        'name' => 'Гнедой',
+    ],
+    [
+        'id' => 7,
+        'name' => 'Черный',
+    ],
+];
+
 $horses = [
     [
         'name' => 'Дакар',
-        'color' => 'Рыжий',
+        'color' => 1,
         'price' => 200,
         'filingTime' => 5,
-        'tariff' => 'Эконом',
-        'city' => 'Томск',
+        'tariff' => 1,
+        'city' => 2,
     ],
     [
         'name' => 'Гамлет',
-        'color' => 'Серый',
+        'color' => 2,
         'price' => 350,
         'filingTime' => 9,
-        'tariff' => 'Эконом',
-        'city' => 'Новосибирск',
+        'tariff' => 1,
+        'city' => 1,
     ],
     [
         'name' => 'Буцефал',
-        'color' => 'Вороной',
+        'color' => 3,
         'price' => 1000,
         'filingTime' => 1,
-        'tariff' => 'Бизнес',
-        'city' => 'Новосибирск',
+        'tariff' => 3,
+        'city' => 2,
     ],
     [
         'name' => 'Зевс',
-        'color' => 'Пегой',
+        'color' => 4,
         'price' => 450,
         'filingTime' => 7,
-        'tariff' => 'Комфорт',
-        'city' => 'Томск',
+        'tariff' => 2,
+        'city' => 1,
     ],
     [
         'name' => 'Аполлон',
-        'color' => 'Буланой',
+        'color' => 5,
         'price' => 150,
         'filingTime' => 13,
-        'tariff' => 'Эконом',
-        'city' => 'Томск',
+        'tariff' => 1,
+        'city' => 2,
     ],
     [
         'name' => 'Спирит',
-        'color' => 'Вороной',
+        'color' => 3,
         'price' => 650,
         'filingTime' => 3,
-        'tariff' => 'Комфорт',
-        'city' => 'Новосибирск',
+        'tariff' => 2,
+        'city' => 2,
 
     ],
     [
         'name' => 'Алтай',
-        'color' => 'Серый',
+        'color' => 2,
         'price' => 250,
         'filingTime' => 8,
-        'tariff' => 'Эконом',
-        'city' => 'Томск',
+        'tariff' => 1,
+        'city' => 1,
     ],
     [
         'name' => 'Вегас',
-        'color' => 'Гнедой',
+        'color' => 6,
         'price' => 700,
         'filingTime' => 4,
-        'tariff' => 'Комфорт',
-        'city' => 'Томск',
+        'tariff' => 2,
+        'city' => 1,
     ],
     [
         'name' => 'Гром',
-        'color' => 'Черный',
+        'color' => 7,
         'price' => 1250,
         'filingTime' => 2,
-        'tariff' => 'Бизнес',
-        'city' => 'Новосибирск',
+        'tariff' => 3,
+        'city' => 2,
     ]
 ];
-$horse = $horses[0];
+
+/**
+ * Ищет в массивах значение параметра  по id.
+ * @param array $array
+ * @param string $key
+ * @param int|string $value
+ * @return array|null
+ */
+function findByItem(array $array, string $key, $value): ?array
+{
+    foreach ($array as $item) {
+        if ($item[$key] === $value) {
+            return $item;
+        }
+    }
+
+    return null;
+}
 
 /**
  * Переводит информацию о лошади из массива в форматированную строку.
@@ -85,70 +160,42 @@ $horse = $horses[0];
  */
 function receiveHorseInfo(array $horse): string
 {
+    global $colors, $cities, $tariffs;
     $format = '%s, цвет %s, тариф- %s, цена за поездку- %d руб. <br/>
            Время подачи лошади в городе %s: %d мин. <br/><br/>';
 
     $horseName = $horse['name'];
-    $color = $horse['color'];
+    $color = findByItem($colors, 'id', $horse['color'])['name'];
     $price = $horse['price'] * BASE_MULTIPLIER;
     $filingTime = $horse['filingTime'];
-    $tariff = $horse['tariff'];
-    $city = $horse['city'];
+    $tariff = findByItem($tariffs, 'id', $horse['tariff'])['name'];
+    $city = findByItem($cities, 'id', $horse['city'])['name'];
 
     return sprintf($format, $horseName, $color, $tariff, $price, $city, $filingTime);
 }
 
 /**
- * Фильтрует список лошадей по городу.
- * @param $horses
- * @param $city
+ * Фильтрует массив по заданному параметру.
+ * @param array $horses
+ * @param string $key
+ * @param $value
  * @return array
  */
-function filterByCity($horses, $city): array
+function filter(array $horses, string $key, $value): ?array
 {
-    $horsesFilteredByCity = [];
-
-    foreach ($horses as $key => $value) {
-        if ($city == $value['city']) {
-            $horsesFilteredByCity [$key] = $value;
+    $result = [];
+    foreach ($horses as $horse) {
+        if ($horse[$key] === $value) {
+            $result[] = $horse;
         }
     }
 
-    return $horsesFilteredByCity;
-
+    return $result;
 }
 
-$newFilteredHorsesByCity = filterByCity($horses, 'Новосибирск');
+$horses = filter($horses, 'tariff', 1);
+$horses = filter($horses, 'city', 1);
 
-/**
- * Фильтрует список лошадей по тарифу.
- * @param $newFilteredHorsesByCity
- * @param $tariff
- * @return array
- */
-function filterByTariff($newFilteredHorsesByCity, $tariff): array
-{
-    $horsesFilteredByTariff = [];
-
-    foreach ($newFilteredHorsesByCity as $key => $value) {
-        if ($tariff == $value['tariff']) {
-            $horsesFilteredByTariff [$key] = $value;
-        }
-    }
-
-    return $horsesFilteredByTariff;
-}
-
-$newFilteredHorsesByTariff = filterByTariff($newFilteredHorsesByCity, 'Комфорт');
-
-foreach ($newFilteredHorsesByTariff as $horse) {
+foreach ($horses as $horse) {
     echo receiveHorseInfo($horse);
 }
-
-
-
-
-
-
-
-
