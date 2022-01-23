@@ -1,134 +1,30 @@
 <?php
-$tariffs = [
-    [
-        'id' => 1,
-        'name' => 'Эконом',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Комфорт',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Бизнес',
-    ],
-];
 
-$cities = [
-    [
-        'id' => 1,
-        'name' => 'Томск',
+function csvArray ($path):array {
 
-    ],
-    [
-        'id' => 2,
-        'name' => 'Новосибирск',
-    ],
-];
+    if (($handle = fopen($path, "r")) !== FALSE) {
+        $keys = fgetcsv($handle, 1000, ";");
+        
+        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            
+            $num = count($data);
+            $item = [];
+            
+            for ($c=0; $c < $num; $c++) {
+                if(is_numeric($data[$c]) === TRUE){
+                   $item[$keys[$c]] = (int)$data[$c];
+               }
+               else{$item[$keys[$c]] = $data[$c];}
+           }
+            $array[] = $item;        
+        }
+    }
+    fclose;
+    return $array;
+}
 
-$colors = [
-    [
-        'id' => 1,
-        'name' => 'Рыжий',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Серый',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Вороной',
-    ],
-    [
-        'id' => 4,
-        'name' => 'Пегой',
-    ],
-    [
-        'id' => 5,
-        'name' => 'Буланой',
-    ],
-    [
-        'id' => 6,
-        'name' => 'Гнедой',
-    ],
-    [
-        'id' => 7,
-        'name' => 'Черный',
-    ],
-];
-
-$horses = [
-    [
-        'name' => 'Дакар',
-        'color' => 1,
-        'price' => 200,
-        'filingTime' => 5,
-        'tariff' => 1,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Гамлет',
-        'color' => 2,
-        'price' => 350,
-        'filingTime' => 9,
-        'tariff' => 1,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Буцефал',
-        'color' => 3,
-        'price' => 1000,
-        'filingTime' => 1,
-        'tariff' => 3,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Зевс',
-        'color' => 4,
-        'price' => 450,
-        'filingTime' => 7,
-        'tariff' => 2,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Аполлон',
-        'color' => 5,
-        'price' => 150,
-        'filingTime' => 13,
-        'tariff' => 1,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Спирит',
-        'color' => 3,
-        'price' => 650,
-        'filingTime' => 3,
-        'tariff' => 2,
-        'city' => 2,
-
-    ],
-    [
-        'name' => 'Алтай',
-        'color' => 2,
-        'price' => 250,
-        'filingTime' => 8,
-        'tariff' => 1,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Вегас',
-        'color' => 6,
-        'price' => 700,
-        'filingTime' => 4,
-        'tariff' => 2,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Гром',
-        'color' => 7,
-        'price' => 1250,
-        'filingTime' => 2,
-        'tariff' => 3,
-        'city' => 2,
-    ]
-];
+$tariffs = csvArray('./database/tariffs.csv');
+$cities = csvArray('./database/cities.csv');
+$colors = csvArray('./database/colors.csv');
+$horses = csvArray('./database/horses.csv');
+var_dump($tariffs);
