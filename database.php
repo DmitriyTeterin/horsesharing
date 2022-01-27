@@ -32,7 +32,7 @@ function csvArray ($path): array {
  * @return array
  */
 function csvString ($path): array{
-
+    
     $array = explode("\n", file_get_contents($path, true, null, 0));
     $keys = explode(";", $array[0]);
     $num = count($array);
@@ -49,7 +49,7 @@ function csvString ($path): array{
         }
         $result[$i-1] = $resultArr;
     }
-    fclose; 
+    
     return $result;
     
 }
