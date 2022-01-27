@@ -4,13 +4,12 @@
  * @param string $path
  * @return array
  */
-function csvArray ($path):array {
+function csvArray ($path): array {
 
-    if (($handle = fopen($path, "r")) !== FALSE) {
-        $keys = fgetcsv($handle, 1000, ";");
+    if (($file = fopen($path, "r")) !== FALSE) {
+        $keys = fgetcsv($file, 1000, ";");
         
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            
+        while (($data = fgetcsv($file, 1000, ";")) !== FALSE) {            
             $num = count($data);
             $item = [];
             
@@ -23,45 +22,102 @@ function csvArray ($path):array {
             $array[] = $item;        
         }
     }
-    fclose;
+    fclose($file);
     return $array;
 }
 
 /**
- * Переводит информацию из таблицы в строку, далее из строки в массив.
+ * Переводит информацию из таблицы в одну строку, далее из строки в массив.
  * @param string $path
  * @return array
  */
-function csvString ($path):array{
-    $string = file_get_contents($path, true, null, 0);
-    $array = explode("\n", $string);
-    $keys []= $array[0];
-    $keys = explode(";", $keys[0]);
+function csvString ($path): array{
+
+    $array = explode("\n", file_get_contents($path, true, null, 0));
+    $keys = explode(";", $array[0]);
     $num = count($array);
     $cnt = count($keys);
     
     for($i = 1; $i < $num; $i++){
-        $horse = explode(";", $array[$i]);
+        $res = explode(";", $array[$i]);
        
-        for($n = 0; $n < $cnt; $n++){
-           
-            if(is_numeric(trim($horse[$n])) === TRUE){
-                $horseArr[trim($keys[$n])] = (int)$horse[$n];
+        for($n = 0; $n < $cnt; $n++){           
+            if(is_numeric(trim($res[$n])) === TRUE){
+                $resultArr[trim($keys[$n])] = (int)$res[$n];
                 }
-            else{$horseArr[$keys[$n]] = $horse[$n];}       
+            else{$resultArr[$keys[$n]] = $res[$n];}       
         }
-        $horses[$i-1] = $horseArr;
+        $result[$i-1] = $resultArr;
     }
-    fclose;
-    return $horses;
+    fclose; 
+    return $result;
     
 }
 
+/**
+ * Читает таблицу построчно и преобразует в массив.
+ * @param string $path
+ * @return array
+ */
+function csvFgets ($path): array{
 
+    $file = fopen($path, 'r');
+    $a = 0; 
 
+    while(($string = fgets($file)) !== FALSE){        
+        $array[$a] = $string;
+        $a++;
+    }
+
+    $keys = explode(";", $array[0]);
+    $num = count($array);
+    $cnt = count($keys);
+
+    for($i = 1; $i < $num; $i++){
+        $res = explode(";", $array[$i]);
+       
+        for($n = 0; $n < $cnt; $n++){           
+            if(is_numeric(trim($res[$n])) === TRUE){
+                $resultArr[trim($keys[$n])] = (int)$res[$n];
+                }
+            else{$resultArr[$keys[$n]] = $res[$n];}       
+        }
+        $result[$i-1] = $resultArr;
+    }
+    fclose($file);
+    return $result;
+
+}
+/**
+ * Читает таблицу построчно и преобразует в массив.
+ * @param string $path
+ * @return array
+ */
+function csvFread ($path): array{
+
+    $file = fopen($path, 'r');
+    $array = explode("\n" , fread($file,filesize($path)));
+    $keys = explode(";", $array[0]);
+    $num = count($array);
+    $cnt = count($keys);
+
+    for($i = 1; $i < $num; $i++){
+        $res = explode(";", $array[$i]);
+       
+        for($n = 0; $n < $cnt; $n++){           
+            if(is_numeric(trim($res[$n])) === TRUE){
+                $resultArr[trim($keys[$n])] = (int)$res[$n];
+                }
+            else{$resultArr[$keys[$n]] = $res[$n];}       
+        }
+        $result[$i-1] = $resultArr;
+    }
+    fclose($file);
+    return $result;
+}
 
 $tariffs = csvArray('./database/tariffs.csv');
 $cities = csvString('./database/cities.csv');
-$colors = csvString('./database/colors.csv');
-$horses = csvString('./database/horses.csv');
+$colors = csvFread('./database/colors.csv');
+$horses = csvFgets('./database/horses.csv');
 
