@@ -16,5 +16,4 @@ function filter(array $horses, string $key, $value): ?array
     }
 
     return $result;
-   
 }

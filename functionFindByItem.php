@@ -11,7 +11,6 @@ function findByItem(array $array, string $key, $value): ?array
     foreach ($array as $item) {
         if ($item[$key] === $value) {
             return $item;
-            
         }
     }
 
