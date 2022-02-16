@@ -1,134 +1,78 @@
 <?php
-$tariffs = [
-    [
-        'id' => 1,
-        'name' => 'Эконом',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Комфорт',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Бизнес',
-    ],
-];
+include 'functionReformatArray.php';
 
-$cities = [
-    [
-        'id' => 1,
-        'name' => 'Томск',
+/**
+ * Переводит информацию из таблицы в массив.
+ * @param string $path
+ * @return array
+ */
+function csvArray(string $path): array
+{
+    $array = [];
+    if (($file = fopen($path, "r")) !== false) {
+        $keys = fgetcsv($file, 1000, ";");
 
-    ],
-    [
-        'id' => 2,
-        'name' => 'Новосибирск',
-    ],
-];
+        while (($data = fgetcsv($file, 1000, ";")) !== false) {
+            $num = count($data);
+            $item = [];
 
-$colors = [
-    [
-        'id' => 1,
-        'name' => 'Рыжий',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Серый',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Вороной',
-    ],
-    [
-        'id' => 4,
-        'name' => 'Пегой',
-    ],
-    [
-        'id' => 5,
-        'name' => 'Буланой',
-    ],
-    [
-        'id' => 6,
-        'name' => 'Гнедой',
-    ],
-    [
-        'id' => 7,
-        'name' => 'Черный',
-    ],
-];
+            for ($c = 0; $c < $num; $c++) {
+                $a = $keys[$c];
+                $item[$a] = is_numeric($data[$c]) === true ? (int)$data[$c] : $data[$c];
+            }
+            $array[] = $item;
+        }
+    }
+    fclose($file);
+    return $array;
+}
 
-$horses = [
-    [
-        'name' => 'Дакар',
-        'color' => 1,
-        'price' => 200,
-        'filingTime' => 5,
-        'tariff' => 1,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Гамлет',
-        'color' => 2,
-        'price' => 350,
-        'filingTime' => 9,
-        'tariff' => 1,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Буцефал',
-        'color' => 3,
-        'price' => 1000,
-        'filingTime' => 1,
-        'tariff' => 3,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Зевс',
-        'color' => 4,
-        'price' => 450,
-        'filingTime' => 7,
-        'tariff' => 2,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Аполлон',
-        'color' => 5,
-        'price' => 150,
-        'filingTime' => 13,
-        'tariff' => 1,
-        'city' => 2,
-    ],
-    [
-        'name' => 'Спирит',
-        'color' => 3,
-        'price' => 650,
-        'filingTime' => 3,
-        'tariff' => 2,
-        'city' => 2,
+/**
+ * Переводит информацию из таблицы в одну строку, далее из строки в массив.
+ * @param string $path
+ * @return array
+ */
+function csvString(string $path): array
+{
+    $array = explode("\n", file_get_contents($path, true, null, 0));
+    return reformatArray($array);
+}
 
-    ],
-    [
-        'name' => 'Алтай',
-        'color' => 2,
-        'price' => 250,
-        'filingTime' => 8,
-        'tariff' => 1,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Вегас',
-        'color' => 6,
-        'price' => 700,
-        'filingTime' => 4,
-        'tariff' => 2,
-        'city' => 1,
-    ],
-    [
-        'name' => 'Гром',
-        'color' => 7,
-        'price' => 1250,
-        'filingTime' => 2,
-        'tariff' => 3,
-        'city' => 2,
-    ]
-];
+/**
+ * Читает таблицу построчно и преобразует в массив.
+ * @param string $path
+ * @return array
+ */
+function csvGets(string $path): array
+{
+    $file = fopen($path, 'r');
+    $a = 0;
+    $array = [];
+    while (($string = fgets($file)) !== false) {
+        $array[$a] = $string;
+        $a++;
+    }
+
+    fclose($file);
+    return reformatArray($array);
+
+}
+
+/**
+ * Читает таблицу построчно и преобразует в массив.
+ * @param string $path
+ * @return array
+ */
+function csvRead(string $path): array
+{
+    $file = fopen($path, 'r');
+    $array = explode("\n", fread($file, filesize($path)));
+    fclose($file);
+    return reformatArray($array);
+}
+
+$tariffs = csvArray('./database/tariffs.csv');
+$cities = csvString('./database/cities.csv');
+$colors = csvRead('./database/colors.csv');
+$horses = csvGets('./database/horses.csv');
+
