@@ -1,14 +1,31 @@
 <?php
-include 'database.php';
-include 'functionFilter.php';
-include 'functionFindByItem.php';
-include 'functionReceiveHorseInfo.php';
+
+include 'functionRequest.php';
+include 'functionOutputHorseInfo.php';
 
 const BASE_MULTIPLIER = 1;
+global $horses;
 
-$horses = filter($horses, 'tariff', 2);
-$horses = filter($horses, 'city', 1);
+$value = checkEmptyRequest($_GET);
 
-foreach ($horses as $horse) {
-    echo receiveHorseInfo($horse);
+if ($value == true) {
+    outputHorseInfo($horses);
+    die;
+}
+
+$getArray = checkRequestParameters($_GET);
+
+if (empty($getArray)) {
+    echo 'Вы ввели несуществующие параметры фильтрации';
+    die;
+}
+
+$result = filteringByGetRequest($getArray);
+
+
+if (empty($result)) {
+
+    echo "По вашему запросу лошадей не найдено.";
+} else {
+    outputHorseInfo($result);
 }
