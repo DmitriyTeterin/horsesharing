@@ -2,77 +2,73 @@
 
 /**
  * Открывает CSV файл с указанным типом доступа.
- * @param array $POST
+ * @param array $request
  * @param string $mode
  * @return false|resource
  */
-function openFile(array $POST, string $mode)
+function openFile(array $request, string $mode)
 {
-    $filename = $POST['type'];
+    $filename = $request['type'];
     $filepath = './database/' . $filename . '.csv';
     return fopen($filepath, $mode);
 }
 
 /**
  * Проверяет наличие в базе данных запрашиваемой таблицы.
- * @param array $POST
+ * @param array $request
  * @return bool
  */
-function checkFile(array $POST): bool
+function checkFile(array $request): bool
 {
-    $filename = $POST['type'];
+    $filename = $request['type'];
     $filepath = './database/' . $filename . '.csv';
     return file_exists($filepath);
 }
 
 /**
  * Возвращает массив с названиями столбцов запрашиваемой таблицы.
- * @param array $POST
+ * @param array $request
  * @return array
  */
-function getFileKeys(array $POST): array
+function getFileKeys(array $request): array
 {
-    $file = openFile($POST, 'r');
+    $file = openFile($request, 'r');
     return fgetcsv($file, 1000, ";");
 }
 
 /**
- * Возвращает массив с ключами из POST запроса, кроме 'type' (хранит название редактируемой таблицы).
- * @param array $POST
+ * Возвращает массив с ключами из запроса, кроме 'type' (хранит название редактируемой таблицы).
+ * @param array $request
  * @return array
  */
-function getPOSTKeys(array $POST): array
+function getRequestKeys(array $request): array
 {
-    $postArray = $POST;
-    $postKeysArray = [];
+    $postArray = $request;
     unset($postArray['type']);
 
-    foreach ($postArray as $key => $value) {
-        $postKeysArray[] = $key;
-    }
-    return $postKeysArray;
+    return array_keys($postArray);
 }
 
 /**
  * Возвращает запрашиваемую таблицу переведенную в массив.
- * @param array $POST
+ * @param array $request
  * @return array
  */
-function getFileArray(array $POST): array
+function getFileArray(array $request): array
 {
-    $filename = $POST['type'];
+    $filename = $request['type'];
     $filepath = './database/' . $filename . '.csv';
     return csvArray($filepath);
 }
 
 /**
- * Возвращает массив из $_POST с переводом числовых значений из string в int.
- * @param array $POST
+ * Возвращает массив из запроса с переводом числовых значений из string в int.
+ * @param array $request
  * @return array
  */
-function getPostArray(array $POST): array
+function getRequestArray(array $request): array
 {
-    $postArray = $POST;
+    $postArray = $request;
     $result = [];
 
     foreach ($postArray as $key => $value) {
@@ -84,25 +80,22 @@ function getPostArray(array $POST): array
 
 /**
  * Проверяет, является ли запись из POST запроса уникальной для БД.
- * @param array $POST
+ * @param array $request
  * @return bool
  */
-function uniqueData(array $POST): bool
+function uniqueData(array $request): bool
 {
-    $result = true;
-
-    $fileArray = getFileArray($POST);
-    $postArray = getPostArray($POST);
+    $fileArray = getFileArray($request);
+    $postArray = getRequestArray($request);
     unset($postArray['type'], $postArray['id'], $postArray['action']);
 
     foreach ($fileArray as $array) {
         unset($array['id']);
 
         if ($postArray == $array) {
-            $result = false;
-            break;
+            return false;
         }
     }
 
-    return $result;
+    return true;
 }

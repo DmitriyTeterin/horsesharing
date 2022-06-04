@@ -3,26 +3,28 @@ include 'functionPostRequest.php';
 
 /**
  * Записывает данные из $_POST в CSV файл.
- * @param array $POST
+ * @param array $request
  * @return void
  */
-function insert(array $POST)
+function insert(array $request)
 {
-    $postArray = getPostArray($POST);
+    $postArray = getRequestArray($request);
 
-    $file = openFile($POST, 'a');
-    $fileKeys = getFileKeys($POST);
-    $fileArray = getFileArray($POST);
+    $file = openFile($request, 'a');
+    $fileKeys = getFileKeys($request);
+    $fileArray = getFileArray($request);
 
-    $newId = count($fileArray) + 1;
+    $idArray =[];
 
-    $count = count($fileKeys);
+    foreach ($fileArray as $value){
+        $idArray[] = $value['id'];
+    }
+    $newId = max($idArray) + 1;
 
     $fields = [];
 
-    for ($i = 0; $i < $count; $i++) {
-        $key = $fileKeys[$i];
-        $key == 'id' ? $fields[$key] = $newId : $fields[$key] = $postArray[$key];
+    foreach ($fileKeys as $key){
+        $fields[$key] = $key == 'id' ?  $newId :  $postArray[$key];
     }
 
     fputcsv($file, $fields, ';');
