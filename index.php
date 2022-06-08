@@ -4,6 +4,8 @@ include 'functionGetRequest.php';
 include 'functionOutputHorseInfo.php';
 include 'insert.php';
 include 'errorOutputFunctions.php';
+include 'delete.php';
+include 'update.php';
 
 const BASE_MULTIPLIER = 1;
 global $horses;
@@ -38,7 +40,7 @@ if (!$isEmptyGet) {
 if ($isEmptyPost) {
     die();
 }
-ErrorCheckFile($_POST);
+errorCheckFile($_POST);
 
 $postKeysArray = getRequestKeys($_POST);
 $postKeysArray = array_diff($postKeysArray, ['action']);
@@ -47,35 +49,40 @@ $missingKeys = array_diff($fileKeysArray, $postKeysArray);
 $excessKeys = array_diff($postKeysArray, $fileKeysArray);
 
 $action = $_POST['action'];
-if (empty($action)) {
-    $action = 'parameter not set';
 
-}
-$errorMissingKeys = ErrorMissingKeys($missingKeys, $postKeysArray, $action);
-$errorExcessKeys = ErrorExcessKeys($excessKeys);
+$isMissingKeys = errorMissingKeys($missingKeys, $postKeysArray, $action);
+$isExcessKeys = errorExcessKeys($excessKeys);
+$isMissingData = errorMissingData($_POST);
+
+
 
 switch ($action) {
     case 'insert' :
-        if (!$errorMissingKeys || !$errorExcessKeys) {
+        if (!$isMissingKeys || !$isExcessKeys || !$isMissingData) {
             die();
         }
-        ErrorUniqueData($_POST);
+        errorUniqueData($_POST);
         insert($_POST);
         $horses = getFileArray($_POST);
         outputHorseInfo($horses);
         break;
     case 'update' :
-        if (!$errorMissingKeys || !$errorExcessKeys) {
+        if (!$isMissingKeys || !$isExcessKeys || !$isMissingData || !searchByIdError($_POST)) { //Макс, то что слева проверка на туеву хучу условий, это легально? есть способ красивее сделать?
             die();
         }
-        ErrorUniqueData($_POST);
-        echo 'test update';
+        errorUniqueData($_POST);
+        update($_POST);
+        $horses = getFileArray($_POST);
+        outputHorseInfo($horses);
         break;
     case 'delete' :
-        if (!$errorMissingKeys) {
+
+        if (!$isMissingKeys || !$isMissingData || !searchByIdError($_POST)) {
             die();
         }
-        echo 'test delete';
+        delete($_POST);
+        $horses = getFileArray($_POST);
+        outputHorseInfo($horses);
         break;
     default :
         echo 'ОШИБКА! В запросе отсутствует или не верно введен параметр "action".';

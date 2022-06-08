@@ -86,13 +86,13 @@ function getRequestArray(array $request): array
 function uniqueData(array $request): bool
 {
     $fileArray = getFileArray($request);
-    $postArray = getRequestArray($request);
-    unset($postArray['type'], $postArray['id'], $postArray['action']);
+    $requestArray = getRequestArray($request);
+    unset($requestArray['type'], $requestArray['id'], $requestArray['action']);
 
     foreach ($fileArray as $array) {
         unset($array['id']);
 
-        if ($postArray == $array) {
+        if ($requestArray == $array) {
             return false;
         }
     }
