@@ -4,13 +4,13 @@ include 'functionFilter.php';
 include 'functionFindByItem.php';
 
 /**
- * Проверяет есть ли параметры в GET запросе.
- * @param array $GET
+ * Проверяет есть ли параметры в GET/POST запросе.
+ * @param array $request
  * @return bool
  */
-function checkEmptyRequest(array $GET): bool
+function checkEmptyRequest(array $request): bool
 {
-    return empty($GET);
+    return empty($request);
 }
 
 /**
